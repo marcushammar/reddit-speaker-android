@@ -149,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
                     for (String title : newTitles){
                         textToSpeech.speak(title, TextToSpeech.QUEUE_ADD, null);
                     }
+                }else{
+                    textToSpeech.speak("Nothing new", TextToSpeech.QUEUE_ADD, null);
                 }
             }else{
                 firstDownloadCompleted = true;
