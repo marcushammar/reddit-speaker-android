@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         new DownloadTitlesFromReddit().execute(url);
     }
 
-    public void logMessage(String logEntry) {
+    private void logMessage(String logEntry) {
         log = log + "\n" + logEntry;
         TextView logTextView = (TextView) findViewById(R.id.logTextView);
         logTextView.setText(log);
