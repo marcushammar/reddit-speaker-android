@@ -17,7 +17,13 @@ public class MainActivity extends AppCompatActivity {
         logTextView.setText(log);
     }
 
-    public void refreshFromRedditButtonTapped(View v){
+    public void refreshFromRedditButtonTapped(View v) {
+        logMessage("Download initiated");
+    }
 
+    public void logMessage(String logEntry) {
+        log = log + "\n" + logEntry;
+        TextView logTextView = (TextView) findViewById(R.id.logTextView);
+        logTextView.setText(log);
     }
 }
