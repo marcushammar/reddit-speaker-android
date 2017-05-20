@@ -51,6 +51,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putSerializable("set", titles);
+        savedInstanceState.putString("log", log);
+        savedInstanceState.putBoolean("firstDownload", firstDownloadCompleted);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        titles = (HashSet<String>)savedInstanceState.getSerializable("set");
+        log = savedInstanceState.getString("log");
+        firstDownloadCompleted = savedInstanceState.getBoolean("firstDownload");
+        TextView logTextView = (TextView) findViewById(R.id.logTextView);
+        logTextView.setText(log);
+
+    }
+
+    @Override
     protected void onPause(){
         if(textToSpeech !=null){
             textToSpeech.stop();
