@@ -150,7 +150,9 @@ public class MainActivity extends AppCompatActivity {
             if(firstDownloadCompleted){
                 if (newTitles.size() > 0){
                     speak("Reddit news");
+                    int i = 1;
                     for (String title : newTitles){
+                        speak("News number " + (i++));
                         speak(title);
                     }
                 }else{
