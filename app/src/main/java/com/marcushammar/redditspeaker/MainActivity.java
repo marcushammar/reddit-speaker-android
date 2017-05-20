@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putSerializable("set", titles);
         savedInstanceState.putString("log", log);
         savedInstanceState.putBoolean("firstDownload", firstDownloadCompleted);
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
         titles = (HashSet<String>)savedInstanceState.getSerializable("set");
@@ -71,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause(){
-        if(textToSpeech !=null){
+    protected void onDestroy(){
+        if(textToSpeech != null){
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
-        super.onPause();
+        super.onDestroy();
     }
 
     public void refreshFromRedditButtonTapped(View v) {
