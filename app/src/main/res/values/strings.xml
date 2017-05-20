@@ -2,5 +2,4 @@
     <string name="app_name">Reddit Speaker</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
-    <string name="logInitiated">Log initiated</string>
 </resources>
