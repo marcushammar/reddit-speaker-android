@@ -8,7 +8,8 @@
         android:id="@+id/startButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/start" />
+        android:text="@string/start"
+        android:enabled="false" />
 
     <Button
         android:id="@+id/stopButton"
@@ -16,6 +17,13 @@
         android:layout_height="wrap_content"
         android:text="@string/stop"
         android:enabled="false" />
+
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/refreshFromReddit"
+        android:onClick="refreshFromRedditButtonTapped"/>
 
     <ScrollView
         android:layout_width="match_parent"
