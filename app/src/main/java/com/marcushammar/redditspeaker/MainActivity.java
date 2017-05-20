@@ -99,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
         logTextView.setText(log);
     }
 
+    private void speak(String text){
+        textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null);
+    }
+
     private class DownloadTitlesFromReddit extends AsyncTask<URL, Void, HashSet<String>> {
         protected HashSet<String> doInBackground(URL... urls) {
             HashSet<String> output = new HashSet<>();
@@ -145,16 +149,16 @@ public class MainActivity extends AppCompatActivity {
             logMessage("Download completed (" + newTitles.size() + " new, " + titles.size() + " in total now)");
             if(firstDownloadCompleted){
                 if (newTitles.size() > 0){
-                    textToSpeech.speak("Reddit news", TextToSpeech.QUEUE_ADD, null);
+                    speak("Reddit news");
                     for (String title : newTitles){
-                        textToSpeech.speak(title, TextToSpeech.QUEUE_ADD, null);
+                        speak(title);
                     }
                 }else{
-                    textToSpeech.speak("Nothing new", TextToSpeech.QUEUE_ADD, null);
+                    speak("Nothing new");
                 }
             }else{
                 firstDownloadCompleted = true;
-                textToSpeech.speak("The first download is now completed", TextToSpeech.QUEUE_ADD, null);
+                speak("The first download is now completed");
             }
         }
     }
