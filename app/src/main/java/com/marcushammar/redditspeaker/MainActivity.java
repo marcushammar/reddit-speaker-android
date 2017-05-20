@@ -2,10 +2,12 @@ package com.marcushammar.redditspeaker;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -26,18 +28,28 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "Reddit Speaker";
+    private final static int TIME_INTERVAL = 1000 * 10;
     private String log = "Log initiated";
     private HashSet<String> titles = new HashSet<>();
     private TextToSpeech textToSpeech;
     private boolean firstDownloadCompleted = false;
+    private Handler handler = new Handler();
+    private boolean running = false;
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            startDownload();
+            handler.postDelayed(runnable, TIME_INTERVAL);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView logTextView = (TextView) findViewById(R.id.logTextView);
-        logTextView.setText(log);
+        updateUserInterface();
 
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -55,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putSerializable("set", titles);
         savedInstanceState.putString("log", log);
         savedInstanceState.putBoolean("firstDownload", firstDownloadCompleted);
+        savedInstanceState.putBoolean("running", running);
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -65,9 +78,19 @@ public class MainActivity extends AppCompatActivity {
         titles = (HashSet<String>)savedInstanceState.getSerializable("set");
         log = savedInstanceState.getString("log");
         firstDownloadCompleted = savedInstanceState.getBoolean("firstDownload");
+        running = savedInstanceState.getBoolean("running");
+        updateUserInterface();
+    }
+
+    private void updateUserInterface(){
         TextView logTextView = (TextView) findViewById(R.id.logTextView);
         logTextView.setText(log);
 
+        Button startButton = (Button) findViewById(R.id.startButton);
+        startButton.setEnabled(!running);
+
+        Button stopButton = (Button) findViewById(R.id.stopButton);
+        stopButton.setEnabled(running);
     }
 
     @Override
@@ -76,10 +99,30 @@ public class MainActivity extends AppCompatActivity {
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
+
+        handler.removeCallbacks(runnable);
+        running = false;
+
         super.onDestroy();
     }
 
+    public void startButtonTapped(View v){
+        runnable.run();
+        running = true;
+        updateUserInterface();
+    }
+
+    public void stopButtonTapped(View v){
+        handler.removeCallbacks(runnable);
+        running = false;
+        updateUserInterface();
+    }
+
     public void refreshFromRedditButtonTapped(View v) {
+        startDownload();
+    }
+
+    public void startDownload(){
         logMessage("Download started");
 
         URL url = null;
