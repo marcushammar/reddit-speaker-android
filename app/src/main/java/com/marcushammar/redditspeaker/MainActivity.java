@@ -33,23 +33,22 @@ public class MainActivity extends AppCompatActivity {
     private HashSet<String> titles = new HashSet<>();
     private TextToSpeech textToSpeech;
     private boolean firstDownloadCompleted = false;
-    private Handler handler = new Handler();
     private boolean running = false;
+    private Handler handler;
+    private LocalRunnable runnable;
 
-    Runnable runnable = new Runnable() {
+    private class LocalRunnable implements Runnable{
         @Override
         public void run() {
             startDownload();
-            handler.postDelayed(runnable, TIME_INTERVAL);
+            handler.postDelayed(runnable, MainActivity.TIME_INTERVAL);
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        updateUserInterface();
 
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -60,10 +59,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        handler = new Handler();
+        runnable = new LocalRunnable();
+
+        if (savedInstanceState != null) {
+            running = savedInstanceState.getBoolean("running");
+        }
+
+        if (running){
+            runnable.run();
+        }
+
+        updateUserInterface();
+
+        Log.i(LOG_TAG,"Method onCreate was finished");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i(LOG_TAG,"Method onSaveInstanceState is called");
         savedInstanceState.putSerializable("set", titles);
         savedInstanceState.putString("log", log);
         savedInstanceState.putBoolean("firstDownload", firstDownloadCompleted);
@@ -80,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         firstDownloadCompleted = savedInstanceState.getBoolean("firstDownload");
         running = savedInstanceState.getBoolean("running");
         updateUserInterface();
+        Log.i(LOG_TAG,"Method onRestoreInstanceState was finished");
     }
 
     private void updateUserInterface(){
@@ -95,13 +110,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy(){
+        Log.i(LOG_TAG,"Method onDestroy is called");
+
         if(textToSpeech != null){
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
 
         handler.removeCallbacks(runnable);
-        running = false;
+        runnable = null;
+        handler = null;
 
         super.onDestroy();
     }
