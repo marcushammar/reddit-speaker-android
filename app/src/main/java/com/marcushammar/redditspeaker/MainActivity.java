@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -28,7 +29,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "Reddit Speaker";
-    private final static int TIME_INTERVAL = 1000 * 10;
+    private final static int TIME_INTERVAL = 1000;
     private String log = "Log initiated";
     private HashSet<String> titles = new HashSet<>();
     private TextToSpeech textToSpeech;
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             startDownload();
-            handler.postDelayed(runnable, MainActivity.TIME_INTERVAL);
+            SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
+            handler.postDelayed(runnable, MainActivity.TIME_INTERVAL * (seekBar.getProgress() + 2));
         }
     }
 
