@@ -33,12 +33,29 @@
         android:text="@string/manualRefresh"
         android:onClick="refreshFromRedditButtonTapped"/>
 
-    <SeekBar
-        android:id="@+id/seekBar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="60"
-        android:progress="15" />
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="55"
+            android:progress="10" />
+
+        <TextView
+            android:id="@+id/seekBarValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:maxLines="1"
+            android:text="@string/seekBarDefaultValue"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"

@@ -29,7 +29,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "Reddit Speaker";
-    private final static int TIME_INTERVAL = 1000;
     private String log = "Log initiated";
     private HashSet<String> titles = new HashSet<>();
     private TextToSpeech textToSpeech;
@@ -37,13 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private boolean running = false;
     private Handler handler;
     private LocalRunnable runnable;
+    private TextView seekBarValue;
+    private int downloadInterval = 15;
 
     private class LocalRunnable implements Runnable{
         @Override
         public void run() {
             startDownload();
-            SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
-            handler.postDelayed(runnable, MainActivity.TIME_INTERVAL * (seekBar.getProgress() + 2));
+            handler.postDelayed(runnable, downloadInterval * 1000);
         }
     }
 
@@ -66,11 +66,31 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             running = savedInstanceState.getBoolean("running");
+            downloadInterval = savedInstanceState.getInt("downloadInterval");
+
         }
 
         if (running){
             runnable.run();
         }
+
+        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
+        seekBarValue = (TextView)findViewById(R.id.seekBarValue);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                seekBarValue.setText(String.valueOf(5 + progress));
+                downloadInterval = 5 + progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
 
         updateUserInterface();
 
@@ -84,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putString("log", log);
         savedInstanceState.putBoolean("firstDownload", firstDownloadCompleted);
         savedInstanceState.putBoolean("running", running);
+        savedInstanceState.putInt("downloadInterval", downloadInterval);
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -95,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         log = savedInstanceState.getString("log");
         firstDownloadCompleted = savedInstanceState.getBoolean("firstDownload");
         running = savedInstanceState.getBoolean("running");
+        downloadInterval = savedInstanceState.getInt("downloadInterval");
         updateUserInterface();
         Log.i(LOG_TAG,"Method onRestoreInstanceState was finished");
     }
