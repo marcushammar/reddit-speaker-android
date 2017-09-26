@@ -26,13 +26,6 @@
             android:text="@string/stop" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/refreshButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/manualRefresh"
-        android:onClick="refreshFromRedditButtonTapped"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
