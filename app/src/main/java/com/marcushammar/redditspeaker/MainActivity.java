@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
             downloadInterval = savedInstanceState.getInt("downloadInterval");
         }
 
-        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
-        seekBarValue = (TextView)findViewById(R.id.seekBarValue);
+        SeekBar seekBar = findViewById(R.id.seekBar);
+        seekBarValue = findViewById(R.id.seekBarValue);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -72,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUserInterface(){
-        TextView logTextView = (TextView) findViewById(R.id.logTextView);
+        TextView logTextView = findViewById(R.id.logTextView);
         logTextView.setText(log);
 
-        Button startButton = (Button) findViewById(R.id.startButton);
+        Button startButton = findViewById(R.id.startButton);
         startButton.setEnabled(!running);
 
-        Button stopButton = (Button) findViewById(R.id.stopButton);
+        Button stopButton = findViewById(R.id.stopButton);
         stopButton.setEnabled(running);
     }
 
