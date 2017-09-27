@@ -26,15 +26,15 @@ import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
 public class BackgroundService extends Service {
-    private static final String LOG_TAG = "Reddit Speaker";
-    private TextToSpeech textToSpeech;
-    private Handler handler;
-    private LocalRunnable runnable;
+    private boolean firstDownloadCompleted = false;
     private boolean running = false;
     private int downloadInterval = 15;
+    private Handler handler;
     private HashSet<String> titles = new HashSet<>();
-    private boolean firstDownloadCompleted = false;
+    private LocalRunnable runnable;
+    private static final String LOG_TAG = "Reddit Speaker";
     private String subreddit;
+    private TextToSpeech textToSpeech;
 
     private class LocalRunnable implements Runnable{
         @Override
@@ -63,8 +63,6 @@ public class BackgroundService extends Service {
         speak("Download will initiate");
         Toast.makeText(this, "Download will initiate", Toast.LENGTH_SHORT).show();
 
-        //logMessage("Download started");
-
         URL url = null;
 
         try{
@@ -76,11 +74,9 @@ public class BackgroundService extends Service {
         new DownloadTitlesFromReddit().execute(url);
     }
 
-
     private void speak(String text){
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null);
     }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -103,7 +99,6 @@ public class BackgroundService extends Service {
                 break;
 
         }
-
         return START_STICKY;
     }
 
@@ -169,7 +164,6 @@ public class BackgroundService extends Service {
             HashSet<String> newTitles = new HashSet<>(result);
             newTitles.removeAll(titles);
             titles.addAll(newTitles);
-            //logMessage("Download completed (" + newTitles.size() + " new, " + titles.size() + " in total now)");
             Toast.makeText(BackgroundService.this, "Download completed (" + newTitles.size() + " new, " + titles.size() + " in total now)", Toast.LENGTH_SHORT).show();
 
             if(firstDownloadCompleted){

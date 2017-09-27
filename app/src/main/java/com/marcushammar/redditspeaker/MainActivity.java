@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private boolean running = false;
+    private int downloadInterval = 15;
     private EditText subredditEditText;
     private TextView seekBarValue;
-    private int downloadInterval = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
         subredditEditText.setText(savedInstanceState.getString("subreddit"));
         running = savedInstanceState.getBoolean("running");
         downloadInterval = savedInstanceState.getInt("downloadInterval");
@@ -76,15 +77,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUserInterface(){
         Button startButton = findViewById(R.id.startButton);
-        startButton.setEnabled(!running);
-
         Button stopButton = findViewById(R.id.stopButton);
-        stopButton.setEnabled(running);
-
         SeekBar seekBar = findViewById(R.id.seekBar);
-        seekBar.setEnabled(!running);
-
         EditText subredditEditText = findViewById(R.id.subredditEditText);
+
+        startButton.setEnabled(!running);
+        stopButton.setEnabled(running);
+        seekBar.setEnabled(!running);
         subredditEditText.setEnabled(!running);
     }
 
