@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button stopButton = findViewById(R.id.stopButton);
         stopButton.setEnabled(running);
+
+        SeekBar seekBar = findViewById(R.id.seekBar);
+        seekBar.setEnabled(!running);
     }
 
     @Override
