@@ -4,4 +4,6 @@
     <string name="stop">Stop</string>
     <string name="manualRefresh">Manual refresh</string>
     <string name="seekBarDefaultValue">15</string>
+    <string name="subredditHint">Enter subreddit such as /r/technology</string>
+    <string name="subredditDefaultValue">/r/technology</string>
 </resources>

@@ -34,6 +34,7 @@ public class BackgroundService extends Service {
     private int downloadInterval = 15;
     private HashSet<String> titles = new HashSet<>();
     private boolean firstDownloadCompleted = false;
+    private String subreddit;
 
     private class LocalRunnable implements Runnable{
         @Override
@@ -66,7 +67,7 @@ public class BackgroundService extends Service {
         URL url = null;
 
         try{
-            url = new URL("https://www.reddit.com/.json");
+            url = new URL("https://www.reddit.com" + subreddit + "/.json");
         }catch (MalformedURLException mue){
             Log.e(LOG_TAG, "MalformedURLException", mue);
         }
@@ -88,6 +89,7 @@ public class BackgroundService extends Service {
             case "WARMUP":
                 break;
             case "START":
+                subreddit = intent.getStringExtra("SUBREDDIT");
                 runnable.run();
                 running = true;
                 break;

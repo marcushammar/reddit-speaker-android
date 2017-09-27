@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private boolean running = false;
+    private EditText subredditEditText;
     private TextView seekBarValue;
     private int downloadInterval = 15;
 
@@ -18,11 +20,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        subredditEditText = findViewById(R.id.subredditEditText);
+
         Intent intent = new Intent(this, BackgroundService.class);
         intent.putExtra("COMMAND", "WARMUP");
         this.startService(intent);
 
         if (savedInstanceState != null) {
+            subredditEditText.setText(savedInstanceState.getString("subreddit"));
             running = savedInstanceState.getBoolean("running");
             downloadInterval = savedInstanceState.getInt("downloadInterval");
         }
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString("subreddit", subredditEditText.getText().toString());
         savedInstanceState.putBoolean("running", running);
         savedInstanceState.putInt("downloadInterval", downloadInterval);
 
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        subredditEditText.setText(savedInstanceState.getString("subreddit"));
         running = savedInstanceState.getBoolean("running");
         downloadInterval = savedInstanceState.getInt("downloadInterval");
         updateUserInterface();
@@ -76,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
         SeekBar seekBar = findViewById(R.id.seekBar);
         seekBar.setEnabled(!running);
+
+        EditText subredditEditText = findViewById(R.id.subredditEditText);
+        subredditEditText.setEnabled(!running);
     }
 
     @Override
@@ -84,8 +94,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startButtonTapped(View v){
+        EditText subredditEditText = findViewById(R.id.subredditEditText);
+
         Intent intent = new Intent(this, BackgroundService.class);
         intent.putExtra("COMMAND", "START");
+        intent.putExtra("SUBREDDIT", subredditEditText.getText().toString());
         this.startService(intent);
 
         running = true;
