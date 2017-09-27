@@ -60,7 +60,8 @@ public class BackgroundService extends Service {
     }
 
     public void startDownload(){
-        Toast.makeText(this, "Download started", Toast.LENGTH_SHORT).show();
+        speak("Download will initiate");
+        Toast.makeText(this, "Download will initiate", Toast.LENGTH_SHORT).show();
 
         //logMessage("Download started");
 
