@@ -9,7 +9,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private String log = "Log initiated";
     private boolean running = false;
     private TextView seekBarValue;
     private int downloadInterval = 15;
@@ -22,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BackgroundService.class);
         intent.putExtra("COMMAND", "WARMUP");
         this.startService(intent);
-
 
         if (savedInstanceState != null) {
             running = savedInstanceState.getBoolean("running");
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString("log", log);
         savedInstanceState.putBoolean("running", running);
         savedInstanceState.putInt("downloadInterval", downloadInterval);
 
@@ -65,16 +62,12 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        log = savedInstanceState.getString("log");
         running = savedInstanceState.getBoolean("running");
         downloadInterval = savedInstanceState.getInt("downloadInterval");
         updateUserInterface();
     }
 
     private void updateUserInterface(){
-        TextView logTextView = findViewById(R.id.logTextView);
-        logTextView.setText(log);
-
         Button startButton = findViewById(R.id.startButton);
         startButton.setEnabled(!running);
 
@@ -103,12 +96,4 @@ public class MainActivity extends AppCompatActivity {
         running = false;
         updateUserInterface();
     }
-
-    /*
-    private void logMessage(String logEntry) {
-        log = log + "\n" + logEntry;
-        TextView logTextView = (TextView) findViewById(R.id.logTextView);
-        logTextView.setText(log);
-    }
-    */
 }

@@ -49,16 +49,4 @@
             android:text="@string/seekBarDefaultValue"
             android:textSize="18sp" />
     </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/logTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        </ScrollView>
-
 </LinearLayout>
